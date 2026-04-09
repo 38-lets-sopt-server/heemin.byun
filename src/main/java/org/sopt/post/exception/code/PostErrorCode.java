@@ -1,8 +1,8 @@
 package org.sopt.post.exception.code;
 
-import org.sopt.global.exception.code.ResponseCode;
+import org.sopt.global.api.code.ResponseCode;
 
-public enum PostResponseCode implements ResponseCode {
+public enum PostErrorCode implements ResponseCode {
     POST_NOT_FOUND("해당 게시글을 찾을 수 없습니다."),
     POST_LIST_EMPTY("등록된 게시글이 없습니다."),
     POST_TITLE_REQUIRED("제목은 필수입니다"),
@@ -10,7 +10,7 @@ public enum PostResponseCode implements ResponseCode {
 
     private final String message;
 
-    PostResponseCode(String message) {
+    PostErrorCode(String message) {
         this.message = message;
     }
 

@@ -3,12 +3,11 @@ package org.sopt.post.dto.request;
 import org.sopt.post.exception.InvalidContentException;
 import org.sopt.post.exception.InvalidTitleException;
 
-public record CreatePostRequest(
+public record UpdatePostRequest(
         String title,
-        String content,
-        String author
+        String content
 ) {
-    public CreatePostRequest {
+    public UpdatePostRequest {
         if (title == null || title.isBlank()) {
             throw new InvalidTitleException();
         }
@@ -17,4 +16,3 @@ public record CreatePostRequest(
         }
     }
 }
-

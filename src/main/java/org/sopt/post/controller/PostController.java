@@ -1,11 +1,14 @@
 package org.sopt.controller;
 
+import org.sopt.domain.Post;
 import org.sopt.dto.request.CreatePostRequest;
 import org.sopt.dto.response.CreatePostResponse;
 import org.sopt.dto.response.PostResponse;
 import org.sopt.service.PostService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class PostController {
     private final PostService postService = new PostService();
@@ -22,12 +25,21 @@ public class PostController {
     // GET /posts 📝 과제
     public List<PostResponse> getAllPosts() {
         // TODO: postService.getAllPosts() 호출해서 반환
+        try {
+            return postService.readAllPosts();
+        } catch (IllegalArgumentException e) {
+            return new ArrayList<>();
+        }
         return null;
     }
 
     // GET /posts/{id} 📝 과제
     public PostResponse getPost(Long id) {
         // TODO: postService.getPost(id) 호출, 예외 발생 시 null 반환
+        try {
+            Optional<Post> post = postService.readPost(id);
+            PostResponse repoonse = new PostResponse(post);
+        } catch
         return null;
     }
 

@@ -7,6 +7,7 @@ import org.sopt.repository.PostRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class PostService {
     private List<Post> postList = new ArrayList<>(); // 임시 저장소 (나중에 DB로 교체됨)
@@ -34,13 +35,24 @@ public class PostService {
     public void readAllPosts() {
         // TODO: postList가 비어있으면 "등록된 게시글이 없습니다." 출력
         // TODO: 비어있지 않으면 모든 게시글의 getInfo()를 순서대로 출력
+        List<Post> postList= postRepository.findAll();
+        if(postList.isEmpty()){
+            throw new IllegalArgumentException("등록된 게시물이 없습니다!");
+        }
+
+
     }
 
     // READ - 단건 📝 과제
     // 목록에서 특정 게시글을 탭하면 호출돼요 (게시글 상세 화면)
-    public void readPost(Long id) {
+    public Optional<Post> readPost(Long id) {
         // TODO: postList에서 id가 일치하는 게시글을 찾아 getInfo() 출력
         // TODO: 없으면 "해당 게시글을 찾을 수 없습니다." 출력
+        Optional<Post> post = Optional.ofNullable(postRepository.findById(id));
+        if (!post.isPresent()) {
+            throw new IllegalArgumentException("해당 게시글을 찾을 수 없습니다.!");
+        }
+        return post;
     }
 
     // UPDATE 📝 과제

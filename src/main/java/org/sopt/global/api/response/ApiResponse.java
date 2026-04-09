@@ -1,4 +1,6 @@
-package org.sopt.global;
+package org.sopt.global.api.response;
+
+import org.sopt.global.api.code.ResponseCode;
 
 public class ApiResponse<T> {
     private final boolean success;
@@ -11,12 +13,12 @@ public class ApiResponse<T> {
         this.data = data;
     }
 
-    public static <T> ApiResponse<T> success(String message, T data) {
-        return new ApiResponse<>(true, message, data);
+    public static <T> ApiResponse<T> success(ResponseCode code, T data) {
+        return new ApiResponse<>(true, code.getMessage(), data);
     }
 
-    public static ApiResponse<Void> success(String message) {
-        return new ApiResponse<>(true, message, null);
+    public static ApiResponse<Void> success(ResponseCode code) {
+        return new ApiResponse<>(true, code.getMessage(), null);
     }
 
     public static <T> ApiResponse<T> error(String message) {

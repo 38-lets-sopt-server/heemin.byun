@@ -1,32 +1,31 @@
-package org.sopt.repository;
+package org.sopt.post.repository;
 
-import org.sopt.domain.Post;
+import org.sopt.post.domain.Post;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class PostRepository {
-    private final List<Post> postList = new ArrayList<>();
+    private final Map<Long, Post> postMap = new HashMap<>();
     private Long nextId = 1L;
 
     public Post save(Post post) {
-        postList.add(post);
+        postMap.put(post.getId(), post);
         return post;
     }
 
     public List<Post> findAll() {
-        return postList;
+        return postMap.values().stream()
+                .sorted(Comparator.comparing(Post::getCreatedAt).reversed())
+                .collect(Collectors.toList());
     }
 
     public Post findById(Long id) {
-        return postList.stream()
-                .filter(p -> p.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+        return postMap.get(id);
     }
 
     public boolean deleteById(Long id) {
-        return postList.removeIf(p -> p.getId().equals(id));
+        return postMap.remove(id) != null;
     }
 
     public Long generateId() {

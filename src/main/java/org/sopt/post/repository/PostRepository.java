@@ -1,10 +1,12 @@
 package org.sopt.post.repository;
 
 import org.sopt.post.domain.Post;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Repository
 public class PostRepository {
     private final Map<Long, Post> postMap = new HashMap<>();
     private Long nextId = 1L;

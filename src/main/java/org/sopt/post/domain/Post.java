@@ -1,11 +1,24 @@
 package org.sopt.post.domain;
 
+import jakarta.persistence.*;
+import org.sopt.user.domain.User;
+
 import java.time.LocalDateTime;
 
+@Entity
 public class Post {
-    private Long id;          // 게시글 상세 화면 — 특정 게시글 식별용
+
+    @Id // 앞에서 배운 PK
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    // 게시글 상세 화면 — 특정 게시글 식별용
     private String title;     // 목록, 상세, 글쓰기 화면 — 제목
     private String content;   // 목록(미리보기), 상세(전체) 화면 — 내용
+
+    @ManyToOne(fetch = FetchType.LAZY)  // User : Post = 1 : N
+    @JoinColumn(name = "user_id")       // post 테이블에 user_id FK 컬럼이 생겨요
+    private User user;
+
     private String author;    // 목록, 상세 화면 — 글쓴이
     private LocalDateTime createdAt; // 목록, 상세 화면 — 작성 시각
 
@@ -27,4 +40,13 @@ public class Post {
         this.title = title;
         this.content = content;
     }
+
+    protected Post() {}  // JPA 기본 생성자
+
+    public Post(String title, String content, User user) {
+        this.title = title;
+        this.content = content;
+        this.user = user;
+    }
+
 }

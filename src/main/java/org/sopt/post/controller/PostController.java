@@ -58,6 +58,7 @@ public class PostController {
         return ResponseEntity.ok(BaseResponse.success(PostSuccessCode.POST_UPDATED, post));
     }
 
+    /*
     // DELETE /posts/{id} 📝 과제
     @DeleteMapping("/{id}")
     public ResponseEntity<BaseResponse<Void>> deletePost(@PathVariable final Long id) {
@@ -65,4 +66,6 @@ public class PostController {
         postService.deletePost(id);
         return ResponseEntity.ok(BaseResponse.success(PostSuccessCode.POST_DELETED));
     }
+
+     */
 }

@@ -8,23 +8,19 @@ public record PostResponse(
         Long id,
         String title,
         String content,
-        String author,
+        String nickname,
         String createdAt
 ) {
+    private static final DateTimeFormatter FORMATTER =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
     public static PostResponse from(Post post) {
         return new PostResponse(
                 post.getId(),
                 post.getTitle(),
                 post.getContent(),
-                post.getAuthor(),
-                post.getCreatedAt().format(
-                        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
-                )
+                post.getUser().getNickname(),
+                post.getCreatedAt().format(FORMATTER)
         );
-    }
-
-    @Override
-    public String toString() {
-        return "[" + id + "] " + title + " - " + author + " (" + createdAt + ")\n" + content;
     }
 }

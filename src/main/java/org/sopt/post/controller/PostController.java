@@ -29,7 +29,8 @@ public class PostController {
 
     @PostMapping
     @Operation(summary = "게시글 작성" ,description = "멤버id를 받아 게시글을 작성합니다.")
-    public ResponseEntity<BaseResponse<PostResponse>> createPost(@RequestBody CreatePostRequest request) {
+    public ResponseEntity<BaseResponse<PostResponse>> createPost(
+            @RequestBody CreatePostRequest request) {
         PostResponse post = postService.createPost(request);
         return ResponseEntity
                 .status(HttpStatus.CREATED)

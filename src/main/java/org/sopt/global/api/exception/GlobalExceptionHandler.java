@@ -1,8 +1,10 @@
 package org.sopt.global.api.exception;
 
+import jakarta.persistence.OptimisticLockException;
 import org.sopt.global.api.code.GlobalErrorCode;
 import org.sopt.global.api.response.BaseResponse;
 import org.springframework.beans.BeanInstantiationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -53,7 +55,14 @@ public class GlobalExceptionHandler {
                 .body(BaseResponse.error(GlobalErrorCode.INVALID_REQUEST.getMessage()));
     }
 
-    //그밖의예외드르
+    @ExceptionHandler(OptimisticLockException.class)
+    public ResponseEntity<BaseResponse<Void>> handleOptimisticLock(OptimisticLockException e) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(BaseResponse.error(GlobalErrorCode.SAME_TIME_REQUEST.getMessage()));
+    }
+
+    //그밖의예외들
     @ExceptionHandler(Exception.class)
     public ResponseEntity<BaseResponse<Void>> handleException(Exception e) {
         e.printStackTrace();

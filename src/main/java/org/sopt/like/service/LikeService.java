@@ -1,7 +1,7 @@
 package org.sopt.like.service;
 
+import org.sopt.global.api.annotation.Retry;
 import org.sopt.like.domain.Like;
-import org.sopt.like.dto.LikeRequest;
 import org.sopt.like.exception.AlreadyLikedException;
 import org.sopt.post.exception.PostNotFoundException;
 import org.sopt.user.exception.UserNotFoundException;
@@ -30,6 +30,7 @@ public class LikeService {
         this.userRepository = userRepository;
     }
 
+    @Retry
     @Transactional
     public void addLike(Long postId, Long userId) {
         Post post = postRepository.findById(postId)
@@ -43,6 +44,7 @@ public class LikeService {
         likeRepository.save(new Like(user, post));
     }
 
+    @Retry
     @Transactional
     public void cancelLike(Long postId, Long userId) {
         Post post = postRepository.findById(postId)

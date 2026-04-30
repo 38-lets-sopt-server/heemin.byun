@@ -70,4 +70,13 @@ public class PostController {
         postService.deletePost(id);
         return ResponseEntity.ok(BaseResponse.success(PostSuccessCode.POST_DELETED));
     }
+
+    @GetMapping("/search")
+    @Operation(summary = "게시글 검색" ,description = "게시글을 제목으로 검색합니다.")
+    public ResponseEntity<BaseResponse<List<PostListResponse>>> searchPosts(
+            @RequestParam String keyword
+    ) {
+        List<PostListResponse> posts = postService.searchByTitle(keyword);
+        return ResponseEntity.ok(BaseResponse.success(PostSuccessCode.POST_SEARCHED, posts));
+    }
 }

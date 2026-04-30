@@ -71,4 +71,9 @@ public class PostService {
                 .orElseThrow(PostNotFoundException::new);
         post.softDelete();
     }
+
+    @Transactional(readOnly = true)
+    public List<PostListResponse> searchByTitle(String keyword) {
+        return postRepository.searchByTitle(keyword);
+    }
 }

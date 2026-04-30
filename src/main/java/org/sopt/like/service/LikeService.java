@@ -1,15 +1,15 @@
 package org.sopt.like.service;
 
 import org.sopt.global.api.annotation.Retry;
-import org.sopt.like.domain.Like;
+import org.sopt.like.entity.Like;
 import org.sopt.like.exception.AlreadyLikedException;
 import org.sopt.post.exception.PostNotFoundException;
 import org.sopt.user.exception.UserNotFoundException;
 import org.sopt.like.exception.LikeNotFoundException;
 import org.sopt.like.repository.LikeRepository;
-import org.sopt.post.domain.Post;
+import org.sopt.post.entity.Post;
 import org.sopt.post.repository.PostRepository;
-import org.sopt.user.domain.User;
+import org.sopt.user.entity.User;
 import org.sopt.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

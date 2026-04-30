@@ -1,8 +1,8 @@
 package org.sopt.post.service;
 
-import org.sopt.post.domain.Post;
+import org.sopt.post.entity.Post;
 import org.sopt.post.dto.response.PostListResponse;
-import org.sopt.user.domain.User;
+import org.sopt.user.entity.User;
 import org.sopt.post.dto.request.CreatePostRequest;
 import org.sopt.post.dto.request.UpdatePostRequest;
 import org.sopt.post.dto.response.PostResponse;

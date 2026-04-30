@@ -1,6 +1,6 @@
 package org.sopt.post.repository;
 
-import org.sopt.post.domain.Post;
+import org.sopt.post.entity.Post;
 import org.sopt.post.dto.response.PostListResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

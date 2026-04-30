@@ -1,6 +1,6 @@
 package org.sopt.post.dto.response;
 
-import org.sopt.post.domain.Post;
+import org.sopt.post.entity.Post;
 
 import java.time.format.DateTimeFormatter;
 

@@ -1,9 +1,9 @@
-package org.sopt.like.domain;
+package org.sopt.like.entity;
 
 import jakarta.persistence.*;
-import org.sopt.global.api.domain.BaseEntity;
-import org.sopt.post.domain.Post;
-import org.sopt.user.domain.User;
+import org.sopt.global.api.entity.BaseEntity;
+import org.sopt.post.entity.Post;
+import org.sopt.user.entity.User;
 
 @Entity
 @Table(name = "likes", uniqueConstraints = {

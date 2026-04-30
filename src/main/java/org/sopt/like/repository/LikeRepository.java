@@ -1,8 +1,8 @@
 package org.sopt.like.repository;
 
-import org.sopt.like.domain.Like;
-import org.sopt.post.domain.Post;
-import org.sopt.user.domain.User;
+import org.sopt.like.entity.Like;
+import org.sopt.post.entity.Post;
+import org.sopt.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

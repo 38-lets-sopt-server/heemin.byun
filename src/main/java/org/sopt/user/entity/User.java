@@ -1,4 +1,4 @@
-package org.sopt.user.domain;
+package org.sopt.user.entity;
 
 import jakarta.persistence.*;
 

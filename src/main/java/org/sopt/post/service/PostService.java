@@ -27,8 +27,8 @@ public class PostService {
     }
 
     @Transactional
-    public PostResponse createPost(CreatePostRequest request) {
-        User user = userRepository.findById(request.userId())
+    public PostResponse createPost(Long memberId,CreatePostRequest request) {
+        User user = userRepository.findById(memberId)
                 .orElseThrow(UserNotFoundException::new);
         Post post = new Post(
                 request.title(),

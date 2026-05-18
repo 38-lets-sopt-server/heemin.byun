@@ -5,8 +5,7 @@ import org.sopt.post.exception.InvalidTitleException;
 
 public record CreatePostRequest(
         String title,
-        String content,
-        Long userId
+        String content
 ) {
     public CreatePostRequest {
         if (title == null || title.isBlank()) {

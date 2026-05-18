@@ -1,6 +1,7 @@
 package org.sopt.post.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.sopt.global.api.entity.BaseEntity;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @SQLDelete(sql = "UPDATE post SET deleted_at = NOW() WHERE id = ?")
 @Where(clause = "deleted_at IS NULL")
 @Entity
+@Getter
 public class Post extends BaseEntity {
 
     @Id // 앞에서 배운 PK
@@ -26,11 +28,6 @@ public class Post extends BaseEntity {
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
-
-    public Long getId() { return id; }
-    public String getTitle() { return title; }
-    public String getContent() { return content; }
-    public User getUser() { return user; }
 
     public void update(String title, String content) {
         this.title = title;

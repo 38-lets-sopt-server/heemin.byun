@@ -1,9 +1,11 @@
 package org.sopt.user.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
 @Table(name = "users")  // "user"는 SQL 예약어라 테이블명을 변경해요
+@Getter
 public class User {
 
     @Id
@@ -12,24 +14,15 @@ public class User {
 
     private String nickname;
 
+    private String password;
+
     private String email;
 
     protected User() {}
 
-    public User(String nickname, String email) {
+    public User(String nickname, String password,String email) {
+        this.password = password;
         this.nickname = nickname;
         this.email = email;
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public String getNickname() {
-        return this.nickname;
-    }
-
-    public String getEmail() {
-        return this.email;
     }
 }

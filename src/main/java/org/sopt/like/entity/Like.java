@@ -1,6 +1,7 @@
 package org.sopt.like.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.sopt.global.api.entity.BaseEntity;
 import org.sopt.post.entity.Post;
 import org.sopt.user.entity.User;
@@ -9,6 +10,7 @@ import org.sopt.user.entity.User;
 @Table(name = "likes", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"user_id", "post_id"})
 })
+@Getter
 public class Like extends BaseEntity {
 
     @Id
@@ -32,8 +34,4 @@ public class Like extends BaseEntity {
         this.user = user;
         this.post = post;
     }
-
-    public Long getId() { return id; }
-    public User getUser() { return user; }
-    public Post getPost() { return post; }
 }

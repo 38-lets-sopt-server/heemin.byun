@@ -3,6 +3,7 @@ package org.sopt.post.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.sopt.auth.service.JwtService;
 import org.sopt.global.api.code.PostSuccessCode;
 import org.sopt.post.dto.request.CreatePostRequest;
 import org.sopt.post.dto.request.UpdatePostRequest;
@@ -10,6 +11,7 @@ import org.sopt.post.dto.response.PostListResponse;
 import org.sopt.post.dto.response.PostResponse;
 import org.sopt.global.api.response.BaseResponse;
 import org.sopt.post.service.PostService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,16 +24,21 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
+    private final JwtService jwtService;
 
-    public PostController(PostService postService) {
+    public PostController(PostService postService,JwtService jwtService) {
         this.postService = postService;
+        this.jwtService = jwtService;
     }
 
     @PostMapping
     @Operation(summary = "게시글 작성" ,description = "멤버id를 받아 게시글을 작성합니다.")
     public ResponseEntity<BaseResponse<PostResponse>> createPost(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
             @RequestBody CreatePostRequest request) {
-        PostResponse post = postService.createPost(request);
+        String token = authorization.substring("Bearer ".length()).trim();
+        Long memberId = jwtService.verifyAndGetMemberId(token);
+        PostResponse post = postService.createPost(memberId,request);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(BaseResponse.success(PostSuccessCode.POST_CREATED, post));

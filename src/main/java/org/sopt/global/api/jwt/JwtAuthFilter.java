@@ -6,7 +6,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.sopt.auth.service.JwtService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,10 +29,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+        System.out.println(">>> Header: " + header);
+
         if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring("Bearer ".length()).trim();
             try {
                 Long memberId = jwtService.verifyAndGetMemberId(token);
+                System.out.println(">>> 인증 성공, memberId: " + memberId);
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                         String.valueOf(memberId), null, Collections.emptyList());
                 auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -43,7 +45,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 // 여기서 예외를 던지지 않는 이유는, /v1/login 같이 인증이 필요 없는 API도
                 // 이 필터를 거치기 때문이에요. 인증 여부 판단은 SecurityConfig의
                 // authorizeHttpRequests 설정에서 담당합니다.
+                System.out.println(">>> 토큰 검증 실패: " + e.getMessage());
             }
+        } else {
+            System.out.println(">>> Authorization 헤더 없음 또는 Bearer 형식 아님");
         }
 
         filterChain.doFilter(request, response);

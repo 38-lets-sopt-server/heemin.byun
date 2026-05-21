@@ -6,6 +6,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.sopt.auth.service.BlacklistService;
+import org.sopt.global.api.exception.BaseException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +23,7 @@ import java.util.Collections;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
+    private final BlacklistService blacklistService;
 
     @Override
     protected void doFilterInternal(
@@ -34,13 +37,17 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring("Bearer ".length()).trim();
             try {
+                if (blacklistService.isBlacklisted(token)) {
+                    filterChain.doFilter(request, response);
+                    return;
+                }
                 Long memberId = jwtService.verifyAndGetMemberId(token);
                 System.out.println(">>> 인증 성공, memberId: " + memberId);
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                        String.valueOf(memberId), null, Collections.emptyList());
+                        memberId, null, Collections.emptyList());
                 auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(auth);
-            } catch (IllegalArgumentException | JWTVerificationException e) {
+            } catch (BaseException e) {
                 // 유효하지 않은 토큰 또는 토큰이 없는 경우, 인증 없이 다음 필터로 넘겨요.
                 // 여기서 예외를 던지지 않는 이유는, /v1/login 같이 인증이 필요 없는 API도
                 // 이 필터를 거치기 때문이에요. 인증 여부 판단은 SecurityConfig의

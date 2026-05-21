@@ -2,7 +2,11 @@ package org.sopt.global.api.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import org.sopt.auth.exception.code.AuthErrorCode;
+import org.sopt.global.api.exception.BaseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +50,7 @@ public class JwtService {
     }
 
     public Long verifyAndGetMemberId(String token) {
+        /*
         if (token == null || token.isBlank()) {
             throw new IllegalArgumentException("토큰이 없습니다.");
         }
@@ -54,6 +59,41 @@ public class JwtService {
             return Long.parseLong(jwt.getSubject());
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("JWT의 회원 정보가 올바르지 않습니다.");
+        }
+
+         */
+        if (token == null || token.isBlank()) {
+            throw new BaseException(AuthErrorCode.EMPTY_TOKEN);
+        }
+
+        try {
+            DecodedJWT jwt = JWT.require(algorithm).build().verify(token);
+            return Long.parseLong(jwt.getSubject());
+        } catch (TokenExpiredException e) {
+            throw new BaseException(AuthErrorCode.EXPIRED_TOKEN);
+        } catch (JWTVerificationException e) {
+            throw new BaseException(AuthErrorCode.MALFORMED_TOKEN);
+        } catch (NumberFormatException e) {
+            throw new BaseException(AuthErrorCode.MALFORMED_TOKEN);
+        }
+    }
+
+    public long getRemainingMillis(String token) {
+        /*
+        DecodedJWT jwt = JWT.require(algorithm).build().verify(token);
+        Date expiration = jwt.getExpiresAt();
+        return expiration.getTime() - System.currentTimeMillis();
+    }
+
+         */
+        try {
+            DecodedJWT jwt = JWT.require(algorithm).build().verify(token);
+            Date expiration = jwt.getExpiresAt();
+            return expiration.getTime() - System.currentTimeMillis();
+        } catch (TokenExpiredException e) {
+            return 0;
+        } catch (JWTVerificationException e) {
+            throw new BaseException(AuthErrorCode.MALFORMED_TOKEN);
         }
     }
 }

@@ -3,7 +3,7 @@ package org.sopt.post.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.sopt.auth.service.JwtService;
+import lombok.RequiredArgsConstructor;
 import org.sopt.global.api.code.PostSuccessCode;
 import org.sopt.post.dto.request.CreatePostRequest;
 import org.sopt.post.dto.request.UpdatePostRequest;
@@ -11,9 +11,9 @@ import org.sopt.post.dto.response.PostListResponse;
 import org.sopt.post.dto.response.PostResponse;
 import org.sopt.global.api.response.BaseResponse;
 import org.sopt.post.service.PostService;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,23 +21,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/posts")
 @Tag(name = "게시글 작성",description = "게시글 작성,수정,조회,삭제 관련 API")
+@RequiredArgsConstructor
 public class PostController {
 
     private final PostService postService;
-    private final JwtService jwtService;
-
-    public PostController(PostService postService,JwtService jwtService) {
-        this.postService = postService;
-        this.jwtService = jwtService;
-    }
 
     @PostMapping
     @Operation(summary = "게시글 작성" ,description = "멤버id를 받아 게시글을 작성합니다.")
     public ResponseEntity<BaseResponse<PostResponse>> createPost(
-            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization,
+            @AuthenticationPrincipal Long memberId,
             @RequestBody CreatePostRequest request) {
-        String token = authorization.substring("Bearer ".length()).trim();
-        Long memberId = jwtService.verifyAndGetMemberId(token);
         PostResponse post = postService.createPost(memberId,request);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -63,19 +56,21 @@ public class PostController {
     @PutMapping("{id}")
     @Operation(summary = "게시글 수정" ,description = "존재하던 게시글을 수정합니다.")
     public ResponseEntity<BaseResponse<PostResponse>> updatePost(
+            @AuthenticationPrincipal Long memberId,
             @Parameter(description = "조회할 게시글의 ID", example = "1", required = true)
             @PathVariable final Long id,
             @RequestBody UpdatePostRequest request) {
-        PostResponse post = postService.updatePost(id, request);
+        PostResponse post = postService.updatePost(id, memberId,request);
         return ResponseEntity.ok(BaseResponse.success(PostSuccessCode.POST_UPDATED, post));
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "게시글 삭제" ,description = "게시글을 삭제합니다.")
     public ResponseEntity<BaseResponse<Void>> deletePost(
+            @AuthenticationPrincipal Long memberId,
             @Parameter(description = "조회할 게시글의 ID", example = "1", required = true)
             @PathVariable final Long id) {
-        postService.deletePost(id);
+        postService.deletePost(id,memberId);
         return ResponseEntity.ok(BaseResponse.success(PostSuccessCode.POST_DELETED));
     }
 

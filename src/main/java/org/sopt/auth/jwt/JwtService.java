@@ -1,4 +1,4 @@
-package org.sopt.global.api.jwt;
+package org.sopt.auth.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -50,18 +50,7 @@ public class JwtService {
     }
 
     public Long verifyAndGetMemberId(String token) {
-        /*
-        if (token == null || token.isBlank()) {
-            throw new IllegalArgumentException("토큰이 없습니다.");
-        }
-        DecodedJWT jwt = JWT.require(algorithm).build().verify(token);
-        try {
-            return Long.parseLong(jwt.getSubject());
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("JWT의 회원 정보가 올바르지 않습니다.");
-        }
 
-         */
         if (token == null || token.isBlank()) {
             throw new BaseException(AuthErrorCode.EMPTY_TOKEN);
         }
@@ -79,13 +68,6 @@ public class JwtService {
     }
 
     public long getRemainingMillis(String token) {
-        /*
-        DecodedJWT jwt = JWT.require(algorithm).build().verify(token);
-        Date expiration = jwt.getExpiresAt();
-        return expiration.getTime() - System.currentTimeMillis();
-    }
-
-         */
         try {
             DecodedJWT jwt = JWT.require(algorithm).build().verify(token);
             Date expiration = jwt.getExpiresAt();

@@ -1,7 +1,9 @@
 package org.sopt.post.service;
 
+import org.sopt.global.api.exception.BaseException;
 import org.sopt.post.entity.Post;
 import org.sopt.post.dto.response.PostListResponse;
+import org.sopt.post.exception.code.PostErrorCode;
 import org.sopt.user.entity.User;
 import org.sopt.post.dto.request.CreatePostRequest;
 import org.sopt.post.dto.request.UpdatePostRequest;
@@ -58,17 +60,23 @@ public class PostService {
     }
 
     @Transactional
-    public PostResponse updatePost(Long id, UpdatePostRequest request) {
+    public PostResponse updatePost(Long id,Long memberId, UpdatePostRequest request) {
         Post post = postRepository.findById(id)
                 .orElseThrow(PostNotFoundException::new);
+        if (!post.isWrittenBy(memberId)) {
+            throw new BaseException(PostErrorCode.POST_NOT_AUTHORIZED);
+        }
         post.update(request.title(), request.content());
         return PostResponse.from(post);
     }
 
     @Transactional
-    public void deletePost(Long id) {
+    public void deletePost(Long id,Long memberId) {
         Post post = postRepository.findById(id)
                 .orElseThrow(PostNotFoundException::new);
+        if (!post.isWrittenBy(memberId)) {
+            throw new BaseException(PostErrorCode.POST_NOT_AUTHORIZED);
+        }
         post.softDelete();
     }
 

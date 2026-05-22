@@ -10,7 +10,11 @@ public enum AuthErrorCode implements ResponseCode {
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증에 실패했습니다."),
     EMAIL_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 이메일입니다."),
     SIGNUP_REQUIRED(HttpStatus.NOT_FOUND,"회원가입이 필요합니다."),
-    INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
+    INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
+
+    EMPTY_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 비어있습니다."),
+    MALFORMED_TOKEN(HttpStatus.UNAUTHORIZED, "토큰 형식이 올바르지 않습니다."),
+    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다.");
 
     private final HttpStatus status;
     private final String message;
